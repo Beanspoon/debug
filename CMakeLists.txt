@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.27)
 project(trace VERSION 0.1)
-set(EXECUTABLE trace.elf)
+set(EXEC trace.elf)
 
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 
-add_executable(EXECUTABLE main.c)
+add_executable(${EXEC} main.c)
 
-#add_subdirectory(boards)
+add_subdirectory(common)
 
-target_compile_options(EXECUTABLE PRIVATE
+target_compile_options(${EXEC} PRIVATE
     -mthumb
     -mcpu=cortex-m4
     -std=c99
@@ -20,7 +20,7 @@ target_compile_options(EXECUTABLE PRIVATE
     -Wall
     -Wextra)
 
-target_link_options(EXECUTABLE PRIVATE
+target_link_options(${EXEC} PRIVATE
     -specs=nosys.specs
     -Wl,--print-memory-usage
     -Wl,-Map=flash.map
