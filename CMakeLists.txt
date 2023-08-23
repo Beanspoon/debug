@@ -4,8 +4,9 @@ set(EXEC trace.elf)
 
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 
-add_executable(${EXEC} main.c)
+add_executable(${EXEC})
 
+add_subdirectory(src)
 add_subdirectory(common)
 
 target_compile_options(${EXEC} PRIVATE

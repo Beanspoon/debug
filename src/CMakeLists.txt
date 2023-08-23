@@ -1,0 +1,1 @@
+target_sources(${EXEC} PRIVATE main.c)
