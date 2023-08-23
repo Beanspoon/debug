@@ -1,0 +1,44 @@
+{
+    "version": 7,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 27,
+        "patch": 1
+    },
+    "configurePresets": [
+        {
+            "name": "mbn52832dk",
+            "displayName": "MBN52832DK configuration",
+            "description": "Configuration for MBN52832DK development board using the nrf52832 chipset",
+            "binaryDir": "${sourceDir}/build/mbn52832dk",
+            "cacheVariables": {
+                "BOARD": {
+                    "type": "STRING",
+                    "value": "MBN52832DK"
+                },
+                "CHIPSET": {
+                    "type": "STRING",
+                    "value": "nrf52832"
+                }
+            }
+        },
+        {
+            "name": "default",
+            "displayName": "Default configuration",
+            "description": "Default configuration is for MBN52832DK",
+            "inherits": "mbn52832dk"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "mbn52832dk",
+            "displayName": "MBN52832DK build",
+            "configurePreset": "mbn52832dk"
+        },
+        {
+            "name": "default",
+            "displayName": "Default build",
+            "inherits": "mbn52832dk"
+        }
+    ]
+}
