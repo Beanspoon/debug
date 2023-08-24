@@ -7,8 +7,10 @@ set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 add_executable(${EXEC})
 
 add_subdirectory(src)
-add_subdirectory(chipsets/nrf52832)
+add_subdirectory(chipsets/${CHIPSET})
 add_subdirectory(common)
+
+target_sources(${EXEC} PRIVATE ${CMAKE_SOURCE_DIR}/link.ld)
 
 target_compile_options(${EXEC} PRIVATE
     -mthumb
@@ -27,4 +29,4 @@ target_link_options(${EXEC} PRIVATE
     -Wl,--print-memory-usage
     -Wl,-Map=flash.map
     -Wl,--gc-sections
-    -Wl,-T ../link.ld)
+    -Wl,-T ${CMAKE_SOURCE_DIR}/link.ld)

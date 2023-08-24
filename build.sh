@@ -7,11 +7,15 @@ for arg in "$@"; do
             echo "Options:"
             echo "  -h, --help  Show this help message"
             echo "  -c, --clean Perform a clean build"
-            exit
+            exit 0
             ;;
         -c|--clean)
             echo "Performing clean build..."
-            rm -rf build
+            fresh="--fresh"
+            ;;
+        -p|--preset)
+            shift
+            preset="$1"
             ;;
         *)
             echo "Unknown option: $arg"
@@ -20,9 +24,10 @@ for arg in "$@"; do
     esac
 done
 
-if [ ! -d "build" ]; then
-    echo "Creating build directory..."
-    mkdir build
+if [ -z "$preset" ]; then
+    preset="default"
 fi
 
-cmake --build --preset=default
+echo "Executing preset \"$preset\"..."
+
+cmake --workflow --preset=$preset $fresh

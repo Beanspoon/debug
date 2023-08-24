@@ -21,12 +21,6 @@
                     "value": "nrf52832"
                 }
             }
-        },
-        {
-            "name": "default",
-            "displayName": "Default configuration",
-            "description": "Default configuration is for MBN52832DK",
-            "inherits": "mbn52832dk"
         }
     ],
     "buildPresets": [
@@ -34,11 +28,35 @@
             "name": "mbn52832dk",
             "displayName": "MBN52832DK build",
             "configurePreset": "mbn52832dk"
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "mbn52832dk",
+            "displayName": "MBN52832DK workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "mbn52832dk"
+                },
+                {
+                    "type": "build",
+                    "name": "mbn52832dk"
+                }
+            ]
         },
         {
             "name": "default",
-            "displayName": "Default build",
-            "inherits": "mbn52832dk"
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "mbn52832dk"
+                },
+                {
+                    "type": "build",
+                    "name": "mbn52832dk"
+                }
+            ]
         }
     ]
 }
