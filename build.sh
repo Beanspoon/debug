@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo
 for arg in "$@"; do
     case "$arg" in
         -h|--help)
