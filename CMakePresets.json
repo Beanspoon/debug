@@ -47,6 +47,7 @@
         },
         {
             "name": "default",
+            "displayName": "Default workflow (MBN52832DK)",
             "steps": [
                 {
                     "type": "configure",

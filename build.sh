@@ -5,8 +5,11 @@ for arg in "$@"; do
         -h|--help)
             echo "Usage: build.sh [OPTIONS]"
             echo "Options:"
-            echo "  -h, --help  Show this help message"
-            echo "  -c, --clean Perform a clean build"
+            echo "  -h, --help      Show this help message"
+            echo "  -c, --clean     Perform a clean build"
+            echo "  -p, --preset    Specify a workflow to run"
+            echo
+            cmake --workflow --list-presets
             exit 0
             ;;
         -c|--clean)
