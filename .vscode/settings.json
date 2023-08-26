@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "board_ctrl.h": "c",
+        "board_cfg.h": "c",
+        "utils.h": "c",
+        "gpio_hal.h": "c"
+    }
+}

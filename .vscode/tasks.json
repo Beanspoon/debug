@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Flash to MBN52832DK",
+			"type": "shell",
+			"command": "JLinkExe",
+			"args": [
+				"-device",
+				"NRF52832_XXAA",
+				"-if",
+				"SWD",
+				"-speed",
+				"4000",
+				"-autoconnect",
+				"1",
+				"-CommanderScript",
+				"${workspaceFolder}/flash_script.jlink"
+			],
+			"problemMatcher": []
+		}
+	]
+}

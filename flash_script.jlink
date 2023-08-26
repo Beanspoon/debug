@@ -1,0 +1,5 @@
+h
+loadfile /home/pk/repos/trace/build/mbn52832dk/trace.elf
+r
+g
+q
