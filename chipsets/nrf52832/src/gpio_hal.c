@@ -29,29 +29,3 @@ tGpio_pinState gpio_readPin(const tGpio_pin pin)
     tGpio_pinState state = (tGpio_pinState)((GPIO.IN & BITMASK(pin)) >> pin);
     return state;
 }
-
-tGpio_status gpio_configureEvent(const tGpio_pin pin,
-                                    const tGpio_pull pullDir,
-                                    const tGpiote_polarity trigger,
-                                    const tGpiote_channel * pChannel)
-{
-    tGpio_status result = GPIO_STATUS_INVALID;
-    tGpiote_channel channel = GPIOTE_CHANNEL_0;
-    
-    while(channel < GPIOTE_CHANNEL_COUNT)
-    {
-        if(GPIOTE.CONFIG[channel].MODE == GPIOTE_MODE_DISABLED)
-        {
-            break;
-        }
-        ++channel;
-    }
-    
-    if(channel <= GPIOTE_CHANNEL_COUNT)
-    {
-        
-        gpio_configureInputPin(pin, pullDir, GPIO_SENSE_DISABLED);
-    }
-    
-
-}
