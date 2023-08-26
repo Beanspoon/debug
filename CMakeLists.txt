@@ -8,6 +8,7 @@ add_executable(${EXEC})
 
 add_subdirectory(src)
 add_subdirectory(chipsets/${CHIPSET})
+add_subdirectory(boards/${BOARD})
 add_subdirectory(common)
 
 target_sources(${EXEC} PRIVATE ${CMAKE_SOURCE_DIR}/link.ld)
