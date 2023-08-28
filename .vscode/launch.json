@@ -6,26 +6,14 @@
     "configurations": [
         {
             "name": "Debug MBN52832DK",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/mbn52832dk/trace.elf",
-            "args": [],
-            "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for GDB",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true,
-                }
-            ],
-            "miDebuggerPath": "JLinkGDBServer",
-            "targetArchitecture": "arm",
-            "miDebuggerServerAddress": "localhost:2331",
-            "preLaunchTask": "Flash to MBN52832DK",
+            "executable": "./build/mbn52832dk/trace.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "jlink",
+            "device": "nRF52832_xxAA",
+            "interface": "swd",
         }
     ]
 }
