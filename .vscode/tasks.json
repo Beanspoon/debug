@@ -17,7 +17,37 @@
 				"-CommanderScript",
 				"${workspaceFolder}/flash_script.jlink"
 			],
-			"problemMatcher": []
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Default cmake workflow (MBN52832DK)",
+			"type": "shell",
+			"command": "sh",
+			"args": [
+				"build.sh",
+				"${input:buildType}"
+			],
+			"group": "build"
+		}
+	],
+	"inputs": [
+		{
+			"id": "buildType",
+			"description": "Please specify rebuild or clean build",
+			"default": "rebuild",
+			"type": "pickString",
+			"options": [
+				{
+					"label": "rebuild",
+					"value": ""
+				},
+				{
+					"label": "clean build",
+					"value": "-c"
+				}
+
+			]
 		}
 	]
 }

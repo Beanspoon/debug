@@ -13,7 +13,7 @@
             "runToEntryPoint": "main",
             "servertype": "jlink",
             "device": "nRF52832_xxAA",
-            "interface": "swd",
+            "interface": "swd"
         }
     ]
 }
