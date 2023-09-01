@@ -8,6 +8,8 @@
 
 #define BITMASK(val)    (1U << val)
 
+#define REG_NUM_FROM_ADDRESS(last, next)    (((next - last) / 4U) - 1U)
+
 /**
  * @brief Copy data from source memory to destination memory
  * 
