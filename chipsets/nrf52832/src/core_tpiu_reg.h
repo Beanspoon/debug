@@ -25,6 +25,12 @@ typedef struct
     RW_reg  TPIU_ACPR;  // 0x010 Asynchronous clock prescaler register. Divisor is prescaler + 1
     RO_reg  UNUSED_B[REG_NUM_FROM_ADDRESS(0x010, 0x0F0)];
     tCoreTpiu_spprReg TPIU_SPPR;    // 0x0F0 Selected pin protocol register
+    RO_reg  UNUSED_C[REG_NUM_FROM_ADDRESS(0x0F0, 0x300)];
+    RO_reg  TPIU_FFSR;  // 0x300 Formatter and flush status register
+    RW_reg  TPIU_FFCR;  // 0x304 Formatter and flush control register
+    RO_reg  TPIU_FSCR;  // 0x308 Formatter synchronisation counter register
+    RO_reg  UNUSED_D[REG_NUM_FROM_ADDRESS(0x308, 0xEE8)];
+    RO_reg  TRIGGER;    // 0xEE8 Register corresponding to the TRIGGER input
 } tCoreTpiu_regMap;
 
 #define CORE_TPIU_BASE_ADDRESS  0xE0040000
