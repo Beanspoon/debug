@@ -4,6 +4,23 @@
 #include "types.h"
 #include "utils.h"
 
+typedef enum
+{
+    TRACE_PRIVILEGE_PORT_0_TO_7_MASK = 0x1,
+    TRACE_PRIVILEGE_PORT_8_TO_15_MASK = 0x2,
+    TRACE_PRIVILEGE_PORT_16_TO_23_MASK = 0x4,
+    TRACE_PRIVILEGE_PORT_24_TO_31_MASK = 0x8
+} tCoreItm_tracePrivilegeMasks;
+
+typedef struct
+{
+    tEnable ITMENA  : 1;    // Bit[0] Enables the ITM
+    tEnable TSENA   : 1;    // Bit[1] Enables local timestamp generation
+    tEnable SYNCENA : 1;    // Bit[2] Enables synchronisation packet transmission for a synchronous TPIU
+    tEnable TXENA   : 1;    // Bit[3] Enables forwarding of hardware event packets from the DWT to the ITM
+    tEnable SWOENA  : 1;    // Bit[4] Enables asynchronous clocking of the timestamp coutner
+} tCoreItm_tcrReg;
+
 typedef struct
 {
     RW_reg  ITM_STIM[32];   // 0x000 - 07C Stimulus port registers
