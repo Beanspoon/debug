@@ -1,0 +1,6 @@
+#ifndef PROJECT_CFG_H
+#define PROJECT_CFG_H
+
+#define SYSTICK_TICK_FREQUENCY_HZ   1000U
+
+#endif  // PROJECT_CFG_H

@@ -4,4 +4,4 @@ target_sources(${EXEC} PRIVATE ${HEADERS}
     src/startup.c
     src/gpio_hal.c
     src/trace_hal.c
-    src/systick_hal.c)
+    src/core_systick_hal.c)

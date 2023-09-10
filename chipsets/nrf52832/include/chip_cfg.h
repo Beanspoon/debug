@@ -1,0 +1,6 @@
+#ifndef CHIP_CFG_H
+#define CHIP_CFG_H
+
+#define CORE_CLOCK_FREQUENCY_HZ 64000000U
+
+#endif  // CHIP_CFG_H

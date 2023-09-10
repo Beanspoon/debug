@@ -1,7 +1,8 @@
 #ifndef CORE_SYSTICK_HAL_H
 #define CORE_SYSTICK_HAL_H
 
-#include "board_cfg.h"
+#include "project_cfg.h"
+#include "chip_cfg.h"
 
 #include <stdint-gcc.h>
 
