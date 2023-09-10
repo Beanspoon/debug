@@ -15,3 +15,8 @@ void trace_init(void)
     CORE_ITM.ITM_TCR.GTSFREQ = GTSFREQ_ON_PACKET;
     CORE_ITM.ITM_TCR.ITMENA = ENABLED;
 }
+
+void print(void)
+{
+    CORE_ITM.ITM_STIM[0] = 'a';
+}
