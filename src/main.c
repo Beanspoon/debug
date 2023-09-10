@@ -1,11 +1,14 @@
-#include "board_ctrl.h"
-
-#include "board_cfg.h"
+#include "trace_hal.h"
+#include "core_systick_hal.h"
 
 void main(void)
 {
-    boardCtrl_configureBoard();
+    systick_init();
+    trace_init();
 
-    boardCtrl_ledActive(LED0);
-    boardCtrl_ledActive(LED1);
+    while(1)
+    {
+        print();
+        systick_busyWait(1000U);
+    }
 }
