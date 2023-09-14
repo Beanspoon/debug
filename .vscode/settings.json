@@ -5,4 +5,8 @@
     "cortex-debug.armToolchainPath": "/opt/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/",
     "cortex-debug.JLinkGDBServerPath": "/opt/SEGGER/JLink/JLinkGDBServerCLExe",
     "cortex-debug.variableUseNaturalFormat": false,
+    "disasexpl.useBinaryParsing": true,
+    "disasexpl.associations": {
+        "**/*.c": "${workspaceFolder}/build/mbn52832dk/trace.elf.s"
+    }
 }
