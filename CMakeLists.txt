@@ -34,3 +34,11 @@ target_link_options(${EXEC} PRIVATE
     -Wl,-Map=flash.map
     -Wl,--gc-sections
     -Wl,-T ${CMAKE_SOURCE_DIR}/link.ld)
+
+add_custom_command(
+    TARGET ${EXEC}
+    POST_BUILD
+    COMMAND arm-none-eabi-objdump 
+    ARGS -d ${CMAKE_BINARY_DIR}/${EXEC} -l > ${CMAKE_BINARY_DIR}/${EXEC}.s
+    COMMENT "Generating disassembly"
+)
