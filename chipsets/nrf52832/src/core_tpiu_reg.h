@@ -19,15 +19,24 @@ typedef struct
 
 typedef struct
 {
+    RO_reg          : 1;
+    tEnable EnFCont : 1;    // Bit[1] Enable continuous formatting
+    const uint8_t   : 0;
+    RO_reg TrigIn   : 1;    // Bit[8] This bit RAO, specifying that triggers are insterted when a trigger pin is asserted
+    RO_reg          : 0;
+} tCoreTpiu_ffcrReg;
+
+typedef struct
+{
     RO_reg  TPIU_SSPSR; // 0x000 Supported parallel port size register
     RW_reg  TPIU_CSPCR; // 0x004 Current parallel port size register
     RO_reg  UNUSED_A[REG_NUM_FROM_ADDRESS(0x004, 0x010)];
     RW_reg  TPIU_ACPR;  // 0x010 Asynchronous clock prescaler register. Divisor is prescaler + 1
     RO_reg  UNUSED_B[REG_NUM_FROM_ADDRESS(0x010, 0x0F0)];
-    tCoreTpiu_spprReg TPIU_SPPR;    // 0x0F0 Selected pin protocol register
+    tCoreTpiu_spprReg   TPIU_SPPR;    // 0x0F0 Selected pin protocol register
     RO_reg  UNUSED_C[REG_NUM_FROM_ADDRESS(0x0F0, 0x300)];
     RO_reg  TPIU_FFSR;  // 0x300 Formatter and flush status register
-    RW_reg  TPIU_FFCR;  // 0x304 Formatter and flush control register
+    tCoreTpiu_ffcrReg   TPIU_FFCR;  // 0x304 Formatter and flush control register
     RO_reg  TPIU_FSCR;  // 0x308 Formatter synchronisation counter register
     RO_reg  UNUSED_D[REG_NUM_FROM_ADDRESS(0x308, 0xEE8)];
     RO_reg  TRIGGER;    // 0xEE8 Register corresponding to the TRIGGER input

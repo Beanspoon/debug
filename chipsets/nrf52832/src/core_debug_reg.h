@@ -5,8 +5,7 @@
 
 typedef struct
 {
-    const uint16_t  : 0;
-    const uint8_t   : 0;
+    RO_reg          : 24;
     RW_reg  TRCENA  : 1;    // Bit[24] Global enable for all DWT and ITM features
     RO_reg          : 0;
 } tCoreDebug_demcrReg;
