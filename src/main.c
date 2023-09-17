@@ -6,9 +6,8 @@ void main(void)
     systick_init();
     trace_init();
 
-    while(1)
-    {
-        traceOut("Trace is cool\n");
-        systick_busyWait(1000U);
-    }
+    traceOut("Print a %% symbol\n");
+    traceOut("Print %s string\n", "another");
+    traceOut("This one has %s in but it doesn't get confused", "a single % symbol");
+    while(1) {}
 }

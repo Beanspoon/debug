@@ -10,7 +10,8 @@
 #include <stdarg.h>
 #include <stdbool.h>
 
-static void parseFormatSpecifier(char const * currentChar, va_list args);
+static void parseFormatSpecifier(char const ** currentChar, va_list args);
+static void putCharacter(char const character);
 
 void trace_init(void)
 {
@@ -31,32 +32,43 @@ void traceOut(char const * const formatString, ...)
 
     while(*currentChar != '\0')
     {
-        while( CORE_ITM.ITM_STIM[0].STATUS == CORE_ITM_FIFO_FULL ) { }
+        parseFormatSpecifier(&currentChar, args);
 
-        // parseFormatSpecifier(currentChar, args);
-
-        CORE_ITM.ITM_STIM[0].WRITE = *currentChar;
+        putCharacter(*currentChar);
         ++currentChar;
     }
     va_end(args);
 }
 
-static void parseFormatSpecifier(char const * currentChar, va_list args)
+static void parseFormatSpecifier(char const ** currentChar, va_list args)
 {
     static bool reentrantGuard = false;
-    if(reentrantGuard || (*currentChar != '%'))
+    if(reentrantGuard || (**currentChar != '%'))
     {
         return;
     }
     reentrantGuard = true;
-    ++currentChar;
-    switch(*currentChar)
+    ++*currentChar;
+    switch(**currentChar)
     {
         case '%':
         {
-            CORE_ITM.ITM_STIM[0].WRITE = '%';
+            putCharacter(**currentChar);
+        }
+        break;
+        case 's':
+        {
+            char const * const string = va_arg(args, char const * const);
+            traceOut(string);
         }
         break;
     }
+    ++*currentChar;
     reentrantGuard = false;
+}
+
+static void putCharacter(char const character)
+{
+    while( CORE_ITM.ITM_STIM[0].STATUS == CORE_ITM_FIFO_FULL ) { }
+    CORE_ITM.ITM_STIM[0].WRITE = character;
 }
