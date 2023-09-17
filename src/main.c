@@ -6,10 +6,13 @@ void main(void)
     systick_init();
     trace_init();
 
-    print("Print a %% symbol\n");
-    print("Print %s string\n", "another");
-    print("This one has %s in but it doesn't get confused\n", "a single % symbol");
-    print("Multiple %s in %s statement\n", "specifiers", "one");
-    print("%s, %s, %s", __FILE__, __LINE__, __func__);
+    while(1){
+        print("\"%%%%\" prints a '%%' symbol\n");
+        print("\"%%s\" prints a string: %s\n", "Hello I am another string");
+        print("This one has %s in the argument string but it doesn't get confused\n", "a single '%' symbol");
+        print("This one has multiple %s in %s statement\n", "specifiers", "one");
+        print("\n");
+    }
+
     while(1) {}
 }

@@ -12,6 +12,7 @@
 
 static void parseCharacter(char const ** const currentChar, va_list * const args);
 static void putCharacter(char const character);
+static void parseUint(char const ** const currentChar, va_list * const args);
 
 void trace_init(void)
 {
@@ -61,6 +62,10 @@ static void parseCharacter(char const ** const currentChar, va_list * const args
             print(string);
         }
         break;
+        case 'u':
+        {
+            parseUint(currentChar, args);
+        }
     }
     ++*currentChar;
     reentrantGuard = false;
@@ -70,4 +75,9 @@ static void putCharacter(char const character)
 {
     while( CORE_ITM.ITM_STIM[0].STATUS == CORE_ITM_FIFO_FULL ) { }
     CORE_ITM.ITM_STIM[0].WRITE = character;
+}
+
+static void parseUint(char const ** const currentChar, va_list * const args)
+{
+
 }
