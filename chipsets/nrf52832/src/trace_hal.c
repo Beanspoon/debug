@@ -4,11 +4,14 @@
 #include "clock_prv.h"
 
 #include "utils.h"
+#include "maths_utils.h"
 
 #include "chip_cfg.h"
 
 #include <stdarg.h>
 #include <stdbool.h>
+
+#define UINT32_MAX_DECIMAL_LENGTH (10U)
 
 static void parseCharacter(char const ** const currentChar, va_list * const args);
 static void putCharacter(char const character);
@@ -66,6 +69,7 @@ static void parseCharacter(char const ** const currentChar, va_list * const args
         {
             parseUint(currentChar, args);
         }
+        break;
     }
     ++*currentChar;
     reentrantGuard = false;
@@ -79,5 +83,16 @@ static void putCharacter(char const character)
 
 static void parseUint(char const ** const currentChar, va_list * const args)
 {
-
+    uint32_t value = va_arg(*args, uint32_t const);
+    char string[STRING_SIZE(UINT32_MAX_DECIMAL_LENGTH)];
+    uint8_t exponent = UINT32_MAX_DECIMAL_LENGTH;  // 10^9 gives 10 digits
+    for( uint8_t place = 0U; place < UINT32_MAX_DECIMAL_LENGTH; ++place)
+    {
+        --exponent;
+        uint32_t power_of_ten = power(10, exponent);
+        uint8_t digit = value / power_of_ten;
+        string[place] = digit + '0';
+        value -= digit * power_of_ten;
+    }
+    print(string);
 }
