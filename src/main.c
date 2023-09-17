@@ -8,7 +8,7 @@ void main(void)
 
     while(1)
     {
-        print();
+        traceOut("Trace is cool\n");
         systick_busyWait(1000U);
     }
 }

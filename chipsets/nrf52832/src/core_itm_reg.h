@@ -6,6 +6,19 @@
 
 typedef enum
 {
+    CORE_ITM_FIFO_FULL,
+    CORE_ITM_FIFO_READY
+} tCoreItm_fifoStatus;
+
+typedef union
+{
+    RW_reg  WRITE;
+    const tCoreItm_fifoStatus STATUS;
+} tCoreItm_stimulusReg;
+
+
+typedef enum
+{
     TRACE_PRIVILEGE_PORT_0_TO_7_MASK = 0x1,
     TRACE_PRIVILEGE_PORT_8_TO_15_MASK = 0x2,
     TRACE_PRIVILEGE_PORT_16_TO_23_MASK = 0x4,
@@ -46,7 +59,7 @@ typedef struct
 
 typedef struct
 {
-    RW_reg  ITM_STIM[32];   // 0x000 - 07C Stimulus port registers
+    tCoreItm_stimulusReg    ITM_STIM[32];   // 0x000 - 07C Stimulus port registers
     RO_reg  UNUSED_A[REG_NUM_FROM_ADDRESS(0x7C, 0xE00)];
     RW_reg  ITM_TER;        // 0xE00 Trace enable register
     RO_reg  UNUSED_B[REG_NUM_FROM_ADDRESS(0xE00, 0xE40)];
