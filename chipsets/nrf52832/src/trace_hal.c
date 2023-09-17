@@ -10,7 +10,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 
-static void parseFormatSpecifier(char const ** currentChar, va_list args);
+static void parseCharacter(char const ** const currentChar, va_list * const args);
 static void putCharacter(char const character);
 
 void trace_init(void)
@@ -24,7 +24,7 @@ void trace_init(void)
     CORE_ITM.ITM_TER = 1U;
 }
 
-void traceOut(char const * const formatString, ...)
+void print(char const * const formatString, ...)
 {
     va_list args;
     va_start(args, formatString);
@@ -32,19 +32,18 @@ void traceOut(char const * const formatString, ...)
 
     while(*currentChar != '\0')
     {
-        parseFormatSpecifier(&currentChar, args);
-
-        putCharacter(*currentChar);
-        ++currentChar;
+        parseCharacter(&currentChar, &args);
     }
     va_end(args);
 }
 
-static void parseFormatSpecifier(char const ** currentChar, va_list args)
+static void parseCharacter(char const ** const currentChar, va_list * const args)
 {
     static bool reentrantGuard = false;
     if(reentrantGuard || (**currentChar != '%'))
     {
+        putCharacter(**currentChar);
+        ++*currentChar;
         return;
     }
     reentrantGuard = true;
@@ -58,8 +57,8 @@ static void parseFormatSpecifier(char const ** currentChar, va_list args)
         break;
         case 's':
         {
-            char const * const string = va_arg(args, char const * const);
-            traceOut(string);
+            char const * const string = va_arg(*args, char const * const);
+            print(string);
         }
         break;
     }

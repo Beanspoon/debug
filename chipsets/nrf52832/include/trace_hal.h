@@ -9,6 +9,6 @@ void trace_init(void);
 /**
  * @brief Prints 'a'
 */
-void traceOut(char const * const formatString, ...);
+void print(char const * const formatString, ...);
 
 #endif  // TRACE_HAL_H
