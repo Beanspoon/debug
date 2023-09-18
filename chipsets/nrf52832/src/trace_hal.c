@@ -4,18 +4,17 @@
 #include "clock_prv.h"
 
 #include "utils.h"
-#include "maths_utils.h"
+#include "var_args.h"
 
 #include "chip_cfg.h"
 
-#include <stdarg.h>
 #include <stdbool.h>
 
 #define UINT32_MAX_DECIMAL_LENGTH (10U)
 
-static void parseCharacter(char const ** const currentChar, va_list * const args);
+static void parseCharacter(char const ** const currentChar, argList * const args);
 static void putCharacter(char const character);
-static void parseUint(char const ** const currentChar, va_list * const args);
+static void parseUint(char const ** const currentChar, argList * const args);
 
 void trace_init(void)
 {
@@ -30,18 +29,17 @@ void trace_init(void)
 
 void print(char const * const formatString, ...)
 {
-    va_list args;
-    va_start(args, formatString);
+    argList args;
+    initArgList(args, formatString);
     char const * currentChar = formatString;
 
     while(*currentChar != '\0')
     {
         parseCharacter(&currentChar, &args);
     }
-    va_end(args);
 }
 
-static void parseCharacter(char const ** const currentChar, va_list * const args)
+static void parseCharacter(char const ** const currentChar, argList * const args)
 {
     static bool reentrantGuard = false;
     if(reentrantGuard || (**currentChar != '%'))
@@ -61,7 +59,7 @@ static void parseCharacter(char const ** const currentChar, va_list * const args
         break;
         case 's':
         {
-            char const * const string = va_arg(*args, char const * const);
+            char const * const string = nextArg(*args, char const * const);
             print(string);
         }
         break;
@@ -81,15 +79,16 @@ static void putCharacter(char const character)
     CORE_ITM.ITM_STIM[0].WRITE = character;
 }
 
-static void parseUint(char const ** const currentChar, va_list * const args)
+static void parseUint(char const ** const currentChar, argList * const args)
 {
-    uint32_t value = va_arg(*args, uint32_t const);
-    char string[STRING_SIZE(UINT32_MAX_DECIMAL_LENGTH)];
+    uint32_t value = nextArg(*args, uint32_t const);
+    char string[
+        STRING_SIZE(UINT32_MAX_DECIMAL_LENGTH)];
     uint8_t exponent = UINT32_MAX_DECIMAL_LENGTH;  // 10^9 gives 10 digits
     for( uint8_t place = 0U; place < UINT32_MAX_DECIMAL_LENGTH; ++place)
     {
         --exponent;
-        uint32_t power_of_ten = power(10, exponent);
+        uint32_t power_of_ten = 10;
         uint8_t digit = value / power_of_ten;
         string[place] = digit + '0';
         value -= digit * power_of_ten;
