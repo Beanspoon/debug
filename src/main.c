@@ -8,6 +8,7 @@ void main(void)
 
     uint32_t counter = 1U;
     while(1){
+        print("This is a test for the home-made va_args: %u %u %u %u %u %u\n", 1, 12, 123, 1234, 12345, 1234567890);
         print("\"%%%%\" prints a '%%' symbol\n");
         print("\"%%s\" prints a string: %s\n", "Hello I am another string");
         print("This one has %s in the argument string but it doesn't get confused\n", "a single '%' symbol");

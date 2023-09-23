@@ -8,5 +8,6 @@
     "disasexpl.useBinaryParsing": true,
     "disasexpl.associations": {
         "**/*.c": "${workspaceFolder}/build/mbn52832dk/trace.elf.s"
-    }
+    },
+    "cmake.configureOnOpen": false
 }

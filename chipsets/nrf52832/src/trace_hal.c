@@ -14,7 +14,7 @@
 
 static void parseCharacter(char const ** const currentChar, argList * const args);
 static void putCharacter(char const character);
-static void parseUint(char const ** const currentChar, argList * const args);
+static void parseUint(argList * const args);
 
 void trace_init(void)
 {
@@ -59,13 +59,13 @@ static void parseCharacter(char const ** const currentChar, argList * const args
         break;
         case 's':
         {
-            char const * const string = nextArg(*args, char const * const);
+            char const * const string = nextArg(*args, char *);
             print(string);
         }
         break;
         case 'u':
         {
-            parseUint(currentChar, args);
+            parseUint(args);
         }
         break;
     }
@@ -79,19 +79,17 @@ static void putCharacter(char const character)
     CORE_ITM.ITM_STIM[0].WRITE = character;
 }
 
-static void parseUint(char const ** const currentChar, argList * const args)
+static void parseUint(argList * const args)
 {
-    uint32_t value = nextArg(*args, uint32_t const);
-    char string[
-        STRING_SIZE(UINT32_MAX_DECIMAL_LENGTH)];
-    uint8_t exponent = UINT32_MAX_DECIMAL_LENGTH;  // 10^9 gives 10 digits
-    for( uint8_t place = 0U; place < UINT32_MAX_DECIMAL_LENGTH; ++place)
+    uint32_t value = nextArg(*args, uint32_t);
+    char string[STRING_SIZE(UINT32_MAX_DECIMAL_LENGTH)] = { '\0' };
+    setBytes(string, '0', UINT32_MAX_DECIMAL_LENGTH);
+    uint8_t place = UINT32_MAX_DECIMAL_LENGTH;
+    while(value > 0)
     {
-        --exponent;
-        uint32_t power_of_ten = 10;
-        uint8_t digit = value / power_of_ten;
-        string[place] = digit + '0';
-        value -= digit * power_of_ten;
+        --place;
+        string[place] = '0' + value % 10U;
+        value /= 10U;
     }
-    print(string);
+    print(&string[place]);
 }
