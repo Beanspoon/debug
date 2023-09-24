@@ -14,6 +14,7 @@ void main(void)
         print("This one has %s in the argument string but it doesn't get confused\n", "a single '%' symbol");
         print("This one has multiple %s in %s statement\n", "specifiers", "one");
         print("This is on line %u in file %s\n", __LINE__, __FILE__);
+        print("This one tests padding for %%u:\n%5u\n%05u %013u %1u %010u\n", 1, 1, 1234567890, 123, 1234567890);
         print("These messages have been reported %u times\n", counter);
         print("\n");
         systick_busyWait(1000U);

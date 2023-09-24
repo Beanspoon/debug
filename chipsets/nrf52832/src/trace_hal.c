@@ -12,9 +12,20 @@
 
 #define UINT32_MAX_DECIMAL_LENGTH (10U)
 
-static void parseCharacter(char const ** const currentChar, argList * const args);
+typedef struct
+{
+    char const * pWidth;
+    bool    padWithZeros;
+} tTraceHal_specifierInfo;
+
+static void parseCharacter(char const ** const pCurrentChar, argList * const args);
+static bool parseSpecifierCharacter(char const ** const pCurrentChar,
+                                    argList * const args,
+                                    tTraceHal_specifierInfo * const pSpecifierInfo);
 static void putCharacter(char const character);
-static void parseUint(argList * const args);
+static void parseUint(char const ** const pCurrentChar,
+                        argList * const args, 
+                        tTraceHal_specifierInfo * const pSpecifierInfo);
 
 void trace_init(void)
 {
@@ -39,38 +50,67 @@ void print(char const * const formatString, ...)
     }
 }
 
-static void parseCharacter(char const ** const currentChar, argList * const args)
+static void parseCharacter(char const ** const pCurrentChar, argList * const args)
 {
     static bool reentrantGuard = false;
-    if(reentrantGuard || (**currentChar != '%'))
+    if(reentrantGuard || (**pCurrentChar != '%'))
+
     {
-        putCharacter(**currentChar);
-        ++*currentChar;
+        putCharacter(**pCurrentChar);
+        ++*pCurrentChar;
         return;
     }
+
+    bool parsingSpecifier = true;
     reentrantGuard = true;
-    ++*currentChar;
-    switch(**currentChar)
+    tTraceHal_specifierInfo specifierInfo = { 0 };
+    while(parsingSpecifier)
+    {
+        ++*pCurrentChar;
+        parsingSpecifier = parseSpecifierCharacter(pCurrentChar, args, &specifierInfo);
+    }
+    ++*pCurrentChar;
+    reentrantGuard = false;
+}
+
+static bool parseSpecifierCharacter(char const ** const pCurrentChar,
+                                    argList * const args,
+                                    tTraceHal_specifierInfo * const pSpecifierInfo)
+{
+    bool parsingSpecifier = true;
+    switch(**pCurrentChar)
     {
         case '%':
         {
-            putCharacter(**currentChar);
+            putCharacter(**pCurrentChar);
+            parsingSpecifier = false;
         }
         break;
         case 's':
         {
             char const * const string = nextArg(*args, char *);
             print(string);
+            parsingSpecifier = false;
         }
         break;
         case 'u':
         {
-            parseUint(args);
+            parseUint(pCurrentChar, args, pSpecifierInfo);
+            parsingSpecifier = false;
+        }
+        break;
+        case '0':
+        {
+            pSpecifierInfo->padWithZeros = (pSpecifierInfo->pWidth == NULL) ? true : pSpecifierInfo->padWithZeros;
+        }
+        break;
+        case '1' ... '9':
+        {
+            pSpecifierInfo->pWidth = (pSpecifierInfo->pWidth == NULL) ? *pCurrentChar : pSpecifierInfo->pWidth;
         }
         break;
     }
-    ++*currentChar;
-    reentrantGuard = false;
+    return parsingSpecifier;
 }
 
 static void putCharacter(char const character)
@@ -79,11 +119,15 @@ static void putCharacter(char const character)
     CORE_ITM.ITM_STIM[0].WRITE = character;
 }
 
-static void parseUint(argList * const args)
+static void parseUint(char const ** const pCurrentChar,
+                        argList * const args, 
+                        tTraceHal_specifierInfo * const pSpecifierInfo)
 {
+    // Generate value from string
     uint32_t value = nextArg(*args, uint32_t);
     char string[STRING_SIZE(UINT32_MAX_DECIMAL_LENGTH)] = { '\0' };
-    setBytes(string, '0', UINT32_MAX_DECIMAL_LENGTH);
+    const char padChar = pSpecifierInfo->padWithZeros ? '0' : ' ';
+    setBytes(string, padChar, UINT32_MAX_DECIMAL_LENGTH);
     uint8_t place = UINT32_MAX_DECIMAL_LENGTH;
     while(value > 0)
     {
@@ -91,5 +135,35 @@ static void parseUint(argList * const args)
         string[place] = '0' + value % 10U;
         value /= 10U;
     }
+
+    // Determine width specifier
+    if(pSpecifierInfo->pWidth == NULL)
+    {
+        // If no width specifier was given, deactivate parsing of the width
+        pSpecifierInfo->pWidth = *pCurrentChar;
+    }
+    uint32_t power = 1U;
+    char const * pDigit = *pCurrentChar - 1U;
+    size_t width = 0U;
+    while(pDigit >= pSpecifierInfo->pWidth)
+    {
+        width += (*pDigit - '0') * power;
+        power *= 10U;
+        --pDigit;
+    }
+
+    // Print extra padding if specifed width is greater than the maximum length of a uint32
+    for(; width > UINT32_MAX_DECIMAL_LENGTH; --width)
+    {
+        putCharacter(padChar);
+    }
+
+    // Update place if width requires more places than are strictly necessary
+    const size_t populatedDigits = UINT32_MAX_DECIMAL_LENGTH - place;
+    if(width > populatedDigits)
+    {
+        place = UINT32_MAX_DECIMAL_LENGTH - width;
+    }
+
     print(&string[place]);
 }
